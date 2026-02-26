@@ -91,6 +91,43 @@
                     </reportPlugins>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.21.1</version>
+                <configuration>
+                    <!-- <targetClasses>
+                        <param>org.jfree.chart.axis.DateAxis</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>org.jfree.chart.axis.DateAxisTest</param>
+                    </targetTests> -->
+                    <outputFormats>
+                        <param>XML</param>
+                        <param>HTML</param>
+                        <param>CSV</param>
+                    </outputFormats>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                <execution>
+                    <goals>
+                    <goal>toolchain</goal>
+                    </goals>
+                </execution>
+                </executions>
+                <configuration>
+                <toolchains>
+                    <jdk>
+                    <version>1.8</version>
+                    </jdk>
+                </toolchains>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
