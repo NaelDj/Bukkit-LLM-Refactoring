@@ -306,6 +306,18 @@ public class MemorySection implements ConfigurationSection {
         return val instanceof Integer;
     }
 
+    /**
+     * Checks if the value at the specified path can be converted to an int.
+     * This includes any Number type, not just Integer.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is a Number, false otherwise
+     */
+    protected boolean isValidIntType(String path) {
+        Object val = get(path, null);
+        return val instanceof Number;
+    }
+
     public boolean getBoolean(String path) {
         Object def = getDefault(path);
         return getBoolean(path, (def instanceof Boolean) ? (Boolean) def : false);
@@ -336,6 +348,18 @@ public class MemorySection implements ConfigurationSection {
         return val instanceof Double;
     }
 
+    /**
+     * Checks if the value at the specified path can be converted to a double.
+     * This includes any Number type, not just Double.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is a Number, false otherwise
+     */
+    protected boolean isValidDoubleType(String path) {
+        Object val = get(path, null);
+        return val instanceof Number;
+    }
+
     public long getLong(String path) {
         Object def = getDefault(path);
         return getLong(path, (def instanceof Number) ? toLong(def) : 0);
@@ -351,6 +375,18 @@ public class MemorySection implements ConfigurationSection {
         return val instanceof Long;
     }
 
+    /**
+     * Checks if the value at the specified path can be converted to a long.
+     * This includes any Number type, not just Long.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is a Number, false otherwise
+     */
+    protected boolean isValidLongType(String path) {
+        Object val = get(path, null);
+        return val instanceof Number;
+    }
+
     // Java
     public List<?> getList(String path) {
         Object def = getDefault(path);
@@ -364,6 +400,17 @@ public class MemorySection implements ConfigurationSection {
 
     public boolean isList(String path) {
         Object val = get(path);
+        return val instanceof List;
+    }
+
+    /**
+     * Checks if the value at the specified path is a List.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is a List, false otherwise
+     */
+    protected boolean isValidListType(String path) {
+        Object val = get(path, null);
         return val instanceof List;
     }
 
@@ -630,6 +677,17 @@ public class MemorySection implements ConfigurationSection {
         return val instanceof Vector;
     }
 
+    /**
+     * Checks if the value at the specified path is a Vector.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is a Vector, false otherwise
+     */
+    protected boolean isValidVectorType(String path) {
+        Object val = get(path, null);
+        return val instanceof Vector;
+    }
+
     public OfflinePlayer getOfflinePlayer(String path) {
         Object def = getDefault(path);
         return getOfflinePlayer(path, (def instanceof OfflinePlayer) ? (OfflinePlayer) def : null);
@@ -660,6 +718,17 @@ public class MemorySection implements ConfigurationSection {
         return val instanceof ItemStack;
     }
 
+    /**
+     * Checks if the value at the specified path is an ItemStack.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is an ItemStack, false otherwise
+     */
+    protected boolean isValidItemStackType(String path) {
+        Object val = get(path, null);
+        return val instanceof ItemStack;
+    }
+
     public Color getColor(String path) {
         Object def = getDefault(path);
         return getColor(path, (def instanceof Color) ? (Color) def : null);
@@ -672,6 +741,17 @@ public class MemorySection implements ConfigurationSection {
 
     public boolean isColor(String path) {
         Object val = get(path);
+        return val instanceof Color;
+    }
+
+    /**
+     * Checks if the value at the specified path is a Color.
+     * 
+     * @param path Path to check
+     * @return true if value exists and is a Color, false otherwise
+     */
+    protected boolean isValidColorType(String path) {
+        Object val = get(path, null);
         return val instanceof Color;
     }
 
@@ -703,6 +783,50 @@ public class MemorySection implements ConfigurationSection {
         Configuration root = getRoot();
         Configuration defaults = root == null ? null : root.getDefaults();
         return (defaults == null) ? null : defaults.get(createPath(this, path));
+    }
+
+    /**
+     * Validates that a path is not null.
+     * This method makes validation logic observable for testing.
+     * 
+     * @param path The path to validate
+     * @return true if path is not null, false otherwise
+     */
+    protected boolean isValidPath(String path) {
+        return path != null;
+    }
+
+    /**
+     * Validates that a path is not null and not empty.
+     * This method makes validation logic observable for testing.
+     * 
+     * @param path The path to validate
+     * @return true if path is not null and not empty, false otherwise
+     */
+    protected boolean isValidNonEmptyPath(String path) {
+        return path != null && !path.isEmpty();
+    }
+
+    /**
+     * Validates that a parent section is not null.
+     * This method makes validation logic observable for testing.
+     * 
+     * @param parent The parent section to validate
+     * @return true if parent is not null, false otherwise
+     */
+    protected static boolean isValidParent(ConfigurationSection parent) {
+        return parent != null;
+    }
+
+    /**
+     * Validates that a section is not null.
+     * This method makes validation logic observable for testing.
+     * 
+     * @param section The section to validate
+     * @return true if section is not null, false otherwise
+     */
+    protected static boolean isValidSection(ConfigurationSection section) {
+        return section != null;
     }
 
     protected void mapChildrenKeys(Set<String> output, ConfigurationSection section, boolean deep) {
