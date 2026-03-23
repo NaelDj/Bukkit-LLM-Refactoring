@@ -257,6 +257,35 @@ public abstract class Command {
     }
 
     /**
+     * Returns the CommandMap this command is currently registered to
+     *
+     * @return the CommandMap this command is registered to, or null if not registered
+     */
+    public CommandMap getCommandMap() {
+        return this.commandMap;
+    }
+
+    /**
+     * Returns the next label that will be used when this command is re-registered
+     *
+     * @return the pending label for this command
+     */
+    public String getNextLabel() {
+        return this.nextLabel;
+    }
+
+    /**
+     * Returns the configured aliases for this command.
+     * Note: This may differ from getAliases() when the command is registered,
+     * as getAliases() returns the active aliases.
+     *
+     * @return List of configured aliases
+     */
+    public List<String> getConfiguredAliases() {
+        return this.aliases;
+    }
+
+    /**
      * Returns a list of active aliases of this command
      *
      * @return List of aliases
