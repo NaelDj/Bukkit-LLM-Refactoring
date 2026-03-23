@@ -57,7 +57,7 @@ public class StandardMessenger implements Messenger {
                 channels.remove(channel);
 
                 if (channels.isEmpty()) {
-                    outgoingByChannel.remove(channel);
+                    outgoingByPlugin.remove(plugin);
                 }
             }
         }
@@ -422,6 +422,70 @@ public class StandardMessenger implements Messenger {
 
         for (PluginMessageListenerRegistration registration : registrations) {
             registration.getListener().onPluginMessageReceived(channel, source, message);
+        }
+    }
+
+    /**
+     * Package-private method for testing: returns the number of incoming registrations for a channel.
+     * This exposes internal state to distinguish "no registrations" from mutated empty returns.
+     */
+    int getIncomingRegistrationCount(String channel) {
+        synchronized (incomingLock) {
+            Set<PluginMessageListenerRegistration> registrations = incomingByChannel.get(channel);
+            return registrations != null ? registrations.size() : 0;
+        }
+    }
+
+    /**
+     * Package-private method for testing: returns the number of incoming registrations for a plugin+channel.
+     * This exposes internal state to distinguish "no registrations" from mutated empty returns.
+     */
+    int getIncomingRegistrationCount(Plugin plugin, String channel) {
+        synchronized (incomingLock) {
+            Set<PluginMessageListenerRegistration> registrations = incomingByPlugin.get(plugin);
+            if (registrations == null) {
+                return 0;
+            }
+            int count = 0;
+            for (PluginMessageListenerRegistration registration : registrations) {
+                if (registration.getChannel().equals(channel)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+    }
+
+    /**
+     * Package-private method for testing: returns the number of channels registered for a plugin.
+     * This exposes internal state to verify proper cleanup after unregistration.
+     */
+    int getOutgoingChannelCountForPlugin(Plugin plugin) {
+        synchronized (outgoingLock) {
+            Set<String> channels = outgoingByPlugin.get(plugin);
+            return channels != null ? channels.size() : 0;
+        }
+    }
+
+    /**
+     * Package-private method for testing: checks if a channel still has an entry in the outgoing map.
+     * Returns true if the map contains the channel key, even if the set is empty.
+     * This exposes internal state to verify proper map cleanup.
+     */
+    boolean hasOutgoingChannelMapEntry(String channel) {
+        synchronized (outgoingLock) {
+            return outgoingByChannel.containsKey(channel);
+        }
+    }
+
+    /**
+     * Package-private method for testing: checks if a plugin still has an entry in the outgoing map.
+     * Returns true if the map contains the plugin key, even if the set is empty.
+     * This exposes internal state to verify proper map cleanup.
+     */
+    boolean hasOutgoingPluginMapEntry(Plugin plugin) {
+        synchronized (outgoingLock) {
+            return outgoingByPlugin.containsKey(plugin);
         }
     }
 
