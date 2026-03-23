@@ -258,6 +258,55 @@ public class SimpleCommandMap implements CommandMap {
         return Collections.unmodifiableCollection(knownCommands.values());
     }
 
+    /**
+     * Checks if a command is registered under the specified label.
+     *
+     * @param label the command label to check
+     * @return true if a command is registered under this label, false otherwise
+     */
+    public boolean isCommandRegistered(String label) {
+        return knownCommands.containsKey(label.toLowerCase());
+    }
+
+    /**
+     * Gets the actual registered label for a command.
+     *
+     * @param command the command to find the label for
+     * @return the registered label, or null if the command is not registered
+     */
+    public String getRegisteredLabel(Command command) {
+        if (command == null) {
+            return null;
+        }
+        for (Map.Entry<String, Command> entry : knownCommands.entrySet()) {
+            if (entry.getValue() == command && entry.getValue().getLabel().equals(entry.getKey())) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the total number of registered commands (including aliases).
+     *
+     * @return the number of registered commands
+     */
+    public int getCommandCount() {
+        return knownCommands.size();
+    }
+
+    /**
+     * Checks if registering a command with the specified label would conflict
+     * with an existing command's primary label.
+     *
+     * @param label the label to check for conflicts
+     * @return true if there would be a conflict, false otherwise
+     */
+    public boolean hasConflict(String label) {
+        Command conflict = knownCommands.get(label.toLowerCase());
+        return conflict != null && conflict.getLabel().equals(label.toLowerCase());
+    }
+
     public void registerServerAliases() {
         Map<String, String[]> values = server.getCommandAliases();
 

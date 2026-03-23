@@ -96,10 +96,10 @@
                 <artifactId>pitest-maven</artifactId>
                 <version>1.21.1</version>
                 <configuration>
-                    <!-- <targetClasses>
-                        <param>org.jfree.chart.axis.DateAxis</param>
+                    <targetClasses>
+                        <param>org.bukkit.command.SimpleCommandMap</param>
                     </targetClasses>
-                    <targetTests>
+                    <!-- <targetTests>
                         <param>org.jfree.chart.axis.DateAxisTest</param>
                     </targetTests> -->
                     <outputFormats>
