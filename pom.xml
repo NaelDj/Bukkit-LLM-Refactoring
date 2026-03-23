@@ -97,7 +97,7 @@
                 <version>1.21.1</version>
                 <configuration>
                     <targetClasses>
-                        <param>org.bukkit.plugin.messaging.StandardMessenger</param>
+                        <param>org.bukkit.plugin.messaging.PluginMessageListenerRegistration</param>
                     </targetClasses>
                     <!-- <targetTests>
                         <param>org.jfree.chart.axis.DateAxisTest</param>
