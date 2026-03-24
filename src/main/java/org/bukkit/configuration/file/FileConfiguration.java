@@ -96,18 +96,19 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @throws IllegalArgumentException Thrown when file is null.
      */
     public void save(File file) throws IOException {
-        Validate.notNull(file, "File cannot be null");
+        validateNotNull(file, "File cannot be null");
 
-        Files.createParentDirs(file);
+        createParentDirectories(file);
 
         String data = saveToString();
 
-        Writer writer = new OutputStreamWriter(new FileOutputStream(file), UTF8_OVERRIDE && !UTF_BIG ? Charsets.UTF_8 : Charset.defaultCharset());
+        Charset charset = selectCharsetForSave();
+        Writer writer = new OutputStreamWriter(new FileOutputStream(file), charset);
 
         try {
-            writer.write(data);
+            writeToWriter(writer, data);
         } finally {
-            writer.close();
+            closeWriter(writer);
         }
     }
 
@@ -127,9 +128,9 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @throws IllegalArgumentException Thrown when file is null.
      */
     public void save(String file) throws IOException {
-        Validate.notNull(file, "File cannot be null");
+        validateNotNull(file, "File cannot be null");
 
-        save(new File(file));
+        saveToFile(new File(file));
     }
 
     /**
@@ -162,11 +163,12 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @throws IllegalArgumentException Thrown when file is null.
      */
     public void load(File file) throws FileNotFoundException, IOException, InvalidConfigurationException {
-        Validate.notNull(file, "File cannot be null");
+        validateNotNull(file, "File cannot be null");
 
         final FileInputStream stream = new FileInputStream(file);
 
-        load(new InputStreamReader(stream, UTF8_OVERRIDE && !UTF_BIG ? Charsets.UTF_8 : Charset.defaultCharset()));
+        Charset charset = selectCharsetForLoad();
+        load(new InputStreamReader(stream, charset));
     }
 
     /**
@@ -220,7 +222,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
                 builder.append('\n');
             }
         } finally {
-            input.close();
+            closeReader(input);
         }
 
         loadFromString(builder.toString());
@@ -245,7 +247,7 @@ public abstract class FileConfiguration extends MemoryConfiguration {
      * @throws IllegalArgumentException Thrown when file is null.
      */
     public void load(String file) throws FileNotFoundException, IOException, InvalidConfigurationException {
-        Validate.notNull(file, "File cannot be null");
+        validateNotNull(file, "File cannot be null");
 
         load(new File(file));
     }
@@ -286,5 +288,93 @@ public abstract class FileConfiguration extends MemoryConfiguration {
         }
 
         return (FileConfigurationOptions) options;
+    }
+
+    /**
+     * Hook method for validating non-null parameters.
+     * This method can be overridden in tests to track validation calls.
+     * 
+     * @param obj the object to validate
+     * @param message the error message if null
+     * @throws IllegalArgumentException if obj is null
+     */
+    protected void validateNotNull(Object obj, String message) {
+        Validate.notNull(obj, message);
+    }
+
+    /**
+     * Hook method for creating parent directories.
+     * This method can be overridden in tests to track directory creation.
+     * 
+     * @param file the file whose parent directories should be created
+     * @throws IOException if directory creation fails
+     */
+    protected void createParentDirectories(File file) throws IOException {
+        Files.createParentDirs(file);
+    }
+
+    /**
+     * Hook method for delegating save to File version.
+     * This method can be overridden in tests to track delegation.
+     * 
+     * @param file the file to save to
+     * @throws IOException if save fails
+     */
+    protected void saveToFile(File file) throws IOException {
+        save(file);
+    }
+
+    /**
+     * Hook method for writing data to a writer.
+     * This method can be overridden in tests to track write operations.
+     * 
+     * @param writer the writer to write to
+     * @param data the data to write
+     * @throws IOException if write fails
+     */
+    protected void writeToWriter(Writer writer, String data) throws IOException {
+        writer.write(data);
+    }
+
+    /**
+     * Hook method for closing a writer.
+     * This method can be overridden in tests to track close operations.
+     * 
+     * @param writer the writer to close
+     * @throws IOException if close fails
+     */
+    protected void closeWriter(Writer writer) throws IOException {
+        writer.close();
+    }
+
+    /**
+     * Hook method for closing a reader.
+     * This method can be overridden in tests to track close operations.
+     * 
+     * @param reader the reader to close
+     * @throws IOException if close fails
+     */
+    protected void closeReader(Reader reader) throws IOException {
+        reader.close();
+    }
+
+    /**
+     * Hook method for selecting charset for save operations.
+     * This method can be overridden in tests to track encoding selection.
+     * 
+     * @return the charset to use for saving
+     */
+    protected Charset selectCharsetForSave() {
+        return UTF8_OVERRIDE && !UTF_BIG ? Charsets.UTF_8 : Charset.defaultCharset();
+    }
+
+    /**
+     * Hook method for selecting charset for load operations.
+     * This method can be overridden in tests to track encoding selection.
+     * 
+     * @return the charset to use for loading
+     */
+    protected Charset selectCharsetForLoad() {
+        return UTF8_OVERRIDE && !UTF_BIG ? Charsets.UTF_8 : Charset.defaultCharset();
     }
 }
