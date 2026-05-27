@@ -5,6 +5,8 @@ Bukkit
 
 This repository is a thesis replication repository based on Bukkit. The original Bukkit README is kept below.
 
+The full replication package is available here: https://github.com/NaelDj/Mutation-LLM-Refactoring
+
 The `base` branch contains the Bukkit version used as the starting point for the thesis runs. Compared to the original project, this branch includes replication-related setup changes:
 
 - the `pitest-maven` plugin was added to `pom.xml`, using PIT version 1.21.1;
