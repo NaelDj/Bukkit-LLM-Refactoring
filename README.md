@@ -19,7 +19,7 @@ The branches `run_7` to `run_12` correspond to the six Bukkit runs analysed in t
 
 The branches `run_9_commented_out`, `run_10_commented_out`, and `run_11_commented_out` contain versions where the newly introduced refactorings and their corresponding assertion lines were commented out. These branches were used to check whether the production-code refactorings contributed to the mutation-score increase, as discussed in the Results chapter of the thesis.
 
-The project remains licensed under the GNU General Public License version 3.0, as stated in the original Bukkit license file.
+The project remains licensed under the GNU General Public License version 3.0, as stated in the original Bukkit license file. The replication-related modifications in this repository were made in 2026 as part of a master's thesis replication package.
 
 A Minecraft Server API.
 
