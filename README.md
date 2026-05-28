@@ -15,7 +15,9 @@ The `base` branch contains the Bukkit version used as the starting point for the
 - a `tools` folder was added with scripts for running tests and PIT mutation testing;
 - baseline PIT reports were included under `pit/pit-reports-before`.
 
-The branches `run_7` to `run_12` correspond to the six Bukkit runs analysed in the thesis. Each run branch contains the production-code and test-code changes produced during that run.
+The branches `run_7` to `run_12` correspond to the six Bukkit runs analysed in the thesis. Each run branch contains the production-code and test-code changes produced during that run. These branches also include the PIT report generated after the run under `pit/pit-reports-after`.
+
+The branches `run_9_commented_out`, `run_10_commented_out`, and `run_11_commented_out` contain versions where the newly introduced refactorings and their corresponding assertion lines were commented out. These branches were used to check whether the production-code refactorings contributed to the mutation-score increase, as discussed in the Results chapter of the thesis.
 
 The project remains licensed under the GNU General Public License version 3.0, as stated in the original Bukkit license file.
 
